@@ -15,7 +15,7 @@ jobs:
     env:
       BASE_URL:        ${{ secrets.BASE_URL }}
       ADMIN_TOKEN:     ${{ secrets.ADMIN_TOKEN }}
-      USER_TOKEN:      ${{ secrets.USER_TOKEN }}
+      TOKEN:           ${{ secrets.TOKEN }}
       CUSTOMER_TOKEN:  ${{ secrets.CUSTOMER_TOKEN }}
       INVALID_TOKEN:   ${{ secrets.INVALID_TOKEN }}
 
@@ -34,7 +34,7 @@ jobs:
           jq '.values |= map(
             if .key=="baseUrl"           then . + {"value":env.BASE_URL}
             elif .key=="adminToken"      then . + {"value":(env.ADMIN_TOKEN     // "")}
-            elif .key=="userToken"       then . + {"value":(env.USER_TOKEN      // "")}
+            elif .key=="token"       then . + {"value":(env.TOKEN      // "")}
             elif .key=="customerToken"   then . + {"value":(env.CUSTOMER_TOKEN  // "")}
             elif .key=="invalidToken"    then . + {"value":(env.INVALID_TOKEN   // "INVALID")}
             else . end
