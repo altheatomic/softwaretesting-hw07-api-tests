@@ -1359,15 +1359,9 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTEvdXNlcnMvbG9naW4iLCJpYXQiOjE3NTU5OTIxNTYsImV4cCI6MTc3MTU5MjE1NiwibmJmIjoxNzU1OTkyMTU2LCJqdGkiOiIxZmhqVVhWY1RrMzYxSHpaIiwic3ViIjoiMiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJyb2xlIjoidXNlciJ9.ulaHab_6DEfeQW7X5zgZYSXYOvY_M7-yYuQgMMFTqBQ",
+				"value": "{{userToken}},
 				"type": "string"
 			}
 		]
 	},
-	"variable": [
-		{
-			"key": "baseUrl",
-			"value": "http://localhost:8091"
-		}
-	]
 }
