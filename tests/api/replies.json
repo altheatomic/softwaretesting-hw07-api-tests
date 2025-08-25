@@ -4,21 +4,12 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   
-  "variable": [
-    { "key": "baseUrl", "value": "http://localhost:8091" },
-    { "key": "adminToken", "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTEvdXNlcnMvbG9naW4iLCJpYXQiOjE3NTYwMTEwNjksImV4cCI6MTc3MTYxMTA2OSwibmJmIjoxNzU2MDExMDY5LCJqdGkiOiJJRzY5bkhwNUl0OWJHVUZaIiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJyb2xlIjoiYWRtaW4ifQ.XHMrYL58F0_z1sXct4nr9FRK8gQUNIfSDpgxZlRMeaA" },
-    { "key": "customerToken", "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTEvdXNlcnMvbG9naW4iLCJpYXQiOjE3NTU5OTIxNTYsImV4cCI6MTc3MTU5MjE1NiwibmJmIjoxNzU1OTkyMTU2LCJqdGkiOiIxZmhqVVhWY1RrMzYxSHpaIiwic3ViIjoiMiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJyb2xlIjoidXNlciJ9.ulaHab_6DEfeQW7X5zgZYSXYOvY_M7-yYuQgMMFTqBQ" },
-    { "key": "invalidToken", "value": "abcdefXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTEvdXNlcnMvbG9naW4iLCJpYXQiOjE3NTU5OTIxNTYsImV4cCI6MTc3MTU5MjE1NiwibmJmIjoxNzU1OTkyMTU2LCJqdGkiOiIxZmhqVVhWY1RrMzYxSHpaIiwic3ViIjoiMiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJyb2xlIjoidXNlciJ9.ulaHab_6DEfeQW7X5zZYSXYOvY_M7-yYuQgMMFTqBQ" },
-    { "key": "messageId_valid", "value": "1" },
-    { "key": "messageId_notFound", "value": "999999" }
-  ],
-
   "auth": {
-  "type": "bearer",
-  "bearer": [
-    { "key": "token", "value": "{{adminToken}}", "type": "string" }
-  ]
-},
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{adminToken}}", "type": "string" }
+    ]
+  },
 
   "item": [
     {
@@ -773,4 +764,5 @@
         }]
         }
   ]
+
 }
