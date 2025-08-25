@@ -2,9 +2,9 @@
   "name": "practice-api-tests",
   "private": true,
   "scripts": {
-    "test:api01": "newman run tests/api/messages.json -e tests/api/env.ci.json --reporters cli,junit,htmlextra --reporter-junit-export reports/api01-junit.xml --reporter-htmlextra-export reports/api01-report.html",
-    "test:api02": "newman run tests/api/replies.json -e tests/api/env.ci.json --reporters cli,junit,htmlextra --reporter-junit-export reports/api02-junit.xml --reporter-htmlextra-export reports/api02-report.html",
-    "test:api03": "newman run tests/api/change-password.json -e tests/api/env.ci.json --reporters cli,junit,htmlextra --reporter-junit-export reports/api03-junit.xml --reporter-htmlextra-export reports/api03-report.html",
+    "test:api01": "newman run tests/api/API-01_SendContact.postman_collection.json -e tests/api/env.postman_environment.json -d tests/api/data/api01_cases.csv --reporters cli,junit,htmlextra --reporter-junit-export reports/api01-junit.xml --reporter-htmlextra-export reports/api01-report.html",
+    "test:api02": "newman run tests/api/API-02_ReplyMessage.postman_collection.json -e tests/api/env.postman_environment.json -d tests/api/data/api02_cases.csv --reporters cli,junit,htmlextra --reporter-junit-export reports/api02-junit.xml --reporter-htmlextra-export reports/api02-report.html",
+    "test:api03": "newman run tests/api/API-03_ChangePassword.postman_collection.json -e tests/api/env.postman_environment.json -d tests/api/data/api03_cases.csv --reporters cli,junit,htmlextra --reporter-junit-export reports/api03-junit.xml --reporter-htmlextra-export reports/api03-report.html",
     "test:all": "rm -rf reports && mkdir -p reports && npm run test:api01 && npm run test:api02 && npm run test:api03"
   },
   "devDependencies": {
