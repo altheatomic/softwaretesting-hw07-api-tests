@@ -1359,7 +1359,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "{{customerToken}},
+				"value": "{{customerToken}}",
 				"type": "string"
 			}
 		]
