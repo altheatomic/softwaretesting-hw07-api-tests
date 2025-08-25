@@ -31,14 +31,24 @@ jobs:
 
       - name: Prepare Postman environment (inject secrets → env.ci.json)
         run: |
-          jq '.values |= map(
-            if .key=="baseUrl"           then . + {"value":env.BASE_URL}
-            elif .key=="adminToken"      then . + {"value":(env.ADMIN_TOKEN     // "")}
-            elif .key=="userToken"       then . + {"value":(env.USER_TOKEN      // "")}
-            elif .key=="customerToken"   then . + {"value":(env.CUSTOMER_TOKEN  // "")}
-            elif .key=="invalidToken"    then . + {"value":(env.INVALID_TOKEN   // "INVALID")}
-            else . end
-          )' tests/api/env.postman_environment.json > tests/api/env.ci.json
+          jq -e . tests/api/env.postman_environment.json >/dev/null
+
+          jq --arg baseUrl        "${BASE_URL}" \
+             --arg adminToken     "${ADMIN_TOKEN:-}" \
+             --arg userToken      "${USER_TOKEN:-}" \
+             --arg customerToken  "${CUSTOMER_TOKEN:-}" \
+             --arg invalidToken   "${INVALID_TOKEN:-INVALID}" \
+             '.values |= map(
+                if .key=="baseUrl"         then . + {value:$baseUrl}
+                elif .key=="adminToken"    then . + {value:$adminToken}
+                elif .key=="userToken"     then . + {value:$userToken}
+                elif .key=="customerToken" then . + {value:$customerToken}
+                elif .key=="invalidToken"  then . + {value:$invalidToken}
+                else . end
+              )' tests/api/env.postman_environment.json > tests/api/env.ci.json
+
+          echo "### Injected env keys" >> $GITHUB_STEP_SUMMARY
+          jq -r '.values[].key' tests/api/env.ci.json | sed 's/^/- /' >> $GITHUB_STEP_SUMMARY
 
       - name: Run Newman - API-01 SendMessage
         run: |
