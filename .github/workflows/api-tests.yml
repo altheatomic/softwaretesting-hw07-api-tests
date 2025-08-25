@@ -42,7 +42,7 @@ jobs:
 
       - name: Run Newman - API-01 SendMessage
         run: |
-          newman run tests/api/API-01 Send Message Test Cases.postman_collection.json \
+          newman run "tests/api/API-01 Send Message Test Cases.postman_collection.json" \
             -e tests/api/env.ci.json \
             --reporters cli,junit,htmlextra \
             --reporter-junit-export reports/api01-junit.xml \
@@ -50,7 +50,7 @@ jobs:
 
       - name: Run Newman - API-02 ReplyMessage
         run: |
-          newman run tests/api/API-02 Reply Message Test Cases.postman_collection.json \
+          newman run "tests/api/API-02 Reply Message Test Cases.postman_collection.json" \
             -e tests/api/env.ci.json \
             --reporters cli,junit,htmlextra \
             --reporter-junit-export reports/api02-junit.xml \
@@ -58,7 +58,7 @@ jobs:
 
       - name: Run Newman - API-03 ChangePassword
         run: |
-          newman run tests/api/API-03 Change Password Test Cases.postman_collection.json \
+          newman run "tests/api/API-03 Change Password Test Cases.postman_collection.json" \
             -e tests/api/env.ci.json \
             --reporters cli,junit,htmlextra \
             --reporter-junit-export reports/api03-junit.xml \
