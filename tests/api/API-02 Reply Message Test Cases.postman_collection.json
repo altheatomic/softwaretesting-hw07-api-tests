@@ -1,0 +1,1489 @@
+{
+	"info": {
+		"_postman_id": "8c0b8b3e-3296-4ce3-8d1d-71f251bf3615",
+		"name": "API-02 Reply Message Test Cases",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47838002",
+		"_collection_link": "https://l-tr-n-kim-oanh-s-team-219428.postman.co/workspace/Team-Workspace~f4a8c71b-9cd4-4302-873d-2fdba87ec6ae/collection/47838002-8c0b8b3e-3296-4ce3-8d1d-71f251bf3615?action=share&source=collection_link&creator=47838002"
+	},
+	"item": [
+		{
+			"name": "TC01 - Reply with minimum-length message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+							"const json = pm.response.json();",
+							"pm.expect(json).to.have.property('message');",
+							"pm.expect(json).to.have.property('id').that.is.a('number');",
+							"pm.expect(json).to.have.property('created_at');"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"A\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC02 - Reply with upper-bound message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.code === 201) {",
+							"    pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+							"} else {",
+							"    pm.test('Status code is 400 for too long', function () { pm.response.to.have.status(400); });",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC03 - Reply with mid-range message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+							"const json = pm.response.json();",
+							"pm.expect(json).to.have.property('message');",
+							"pm.expect(json).to.have.property('id').that.is.a('number');",
+							"pm.expect(json).to.have.property('created_at');"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Thanks for your help\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC04 - Empty message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 422 for empty message', function () { pm.response.to.have.status(422); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC05 - Above upper bound",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 422 for message too long', function () { pm.response.to.have.status(422); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC06 - Message only spaces",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+							"const json = pm.response.json();",
+							"pm.expect(json).to.have.property('message');",
+							"pm.expect(json).to.have.property('id').that.is.a('number');",
+							"pm.expect(json).to.have.property('created_at');"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"   \"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC07 - Message with Unicode/emoji",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+							"const json = pm.response.json();",
+							"pm.expect(json).to.have.property('message');",
+							"pm.expect(json).to.have.property('id').that.is.a('number');",
+							"pm.expect(json).to.have.property('created_at');"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Cảm ơn bạn 😊\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC08 - Message with newline",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+							"const json = pm.response.json();",
+							"pm.expect(json).to.have.property('message');",
+							"pm.expect(json).to.have.property('id').that.is.a('number');",
+							"pm.expect(json).to.have.property('created_at');"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Hello\\nWorld\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC09 - messageId not found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 404', function () { pm.response.to.have.status(404); });",
+							"const json = pm.response.json();",
+							"pm.expect(json).to.have.property('message');"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Hello\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_notFound}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_notFound}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC10 - messageId non-numeric",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 422', function () {",
+							"  pm.expect(422).to.include(pm.response.code);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Hello\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/abc/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"abc",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC11 - messageId = 0 (lower boundary)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 404 or 400', function () {",
+							"  pm.expect([404,400]).to.include(pm.response.code);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Hello\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/0/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"0",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC12 - messageId negative",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 404 or 400', function () {",
+							"  pm.expect([404,400]).to.include(pm.response.code);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Hello\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/-1/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"-1",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC13 - Missing Content-Type",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 415 or 400', function () {",
+							"  pm.expect([415,400]).to.include(pm.response.code);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Hello\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC14 - Wrong Content-Type",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 415 or 400', function () {",
+							"  pm.expect([415,400]).to.include(pm.response.code);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "text/plain"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Hello\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC15 - Malformed JSON body",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400', function () { pm.response.to.have.status(400); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Hello\""
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC16 - Extra undefined field",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+							"const json = pm.response.json();",
+							"pm.expect(json).to.have.property('message');",
+							"pm.expect(json).to.have.property('id').that.is.a('number');",
+							"pm.expect(json).to.have.property('created_at');"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"OK\",\"extra\":\"x\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC17 - Customer replies to own message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+							"const json = pm.response.json();",
+							"pm.expect(json).to.have.property('message');",
+							"pm.expect(json).to.have.property('id').that.is.a('number');",
+							"pm.expect(json).to.have.property('created_at');"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{customerToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Customer reply\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC18 - Unexpected Accept header",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+							"const json = pm.response.json();",
+							"pm.expect(json).to.have.property('message');",
+							"pm.expect(json).to.have.property('id').that.is.a('number');",
+							"pm.expect(json).to.have.property('created_at');"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "text/html"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Hello\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC19 - Max-length with multi-byte Unicode",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+							"const json = pm.response.json();",
+							"pm.expect(json).to.have.property('message');",
+							"pm.expect(json).to.have.property('id').that.is.a('number');",
+							"pm.expect(json).to.have.property('created_at');"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC20 - Leading/trailing spaces trimmed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+							"const json = pm.response.json();",
+							"pm.expect(json).to.have.property('message');",
+							"pm.expect(json).to.have.property('id').that.is.a('number');",
+							"pm.expect(json).to.have.property('created_at');"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"  hello  \"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC21 - Missing Authorization",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 401', function () { pm.response.to.have.status(401); });",
+							"const json = pm.response.json();",
+							"pm.expect(json).to.have.property('message');"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Hello\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC22 - Invalid/expired token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 401', function () { pm.response.to.have.status(401); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{invalidToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Hello\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC23 - Customer replies invalid message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 404 or 400', function () {",
+							"  pm.expect([404,400]).to.include(pm.response.code);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{customerToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Hello\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_notFound}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_notFound}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC24 - XSS payload in message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('No script execution in response', function () {",
+							"  pm.expect(pm.response.text()).not.to.include('<script>');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"<script>alert(1)</script>\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC25 - Stored XSS probe (render at UI)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('No script execution in response', function () {",
+							"  pm.expect(pm.response.text()).not.to.include('onerror');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"<img src=x onerror=alert(1)>\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC26 - SQL injection string in message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('No 5xx error', function () {",
+							"    pm.expect(pm.response.code).not.to.be.within(500,599);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"' OR '1'='1\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC27 - JSON injection / special escapes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('No parser crash', function () {",
+							"    pm.expect(pm.response.code).not.to.be.within(500,599);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"{\\\"foo\\\": \\\"bar\\\"}\\n\\\\\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC28 - Header CRLF / smuggling attempt",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('No 5xx error', function () {",
+							"    pm.expect(pm.response.code).not.to.be.within(500,599);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}\\r\\nInjected: evil"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Hello\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC29 - Content-Type spoof vs body mismatch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 400 or 415', function () {",
+							"  pm.expect([400,415]).to.include(pm.response.code);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "message=Hello&foo=bar"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC30 - Accept header negotiation (XML)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test('Status 406 or 201', function () { pm.expect([406,201]).to.include(pm.response.code); });",
+							"pm.test('No 5xx', function () { pm.expect(pm.response.code).not.to.be.within(500,599); });",
+							"if (pm.response.code === 201) {",
+							"  pm.test('Fallback to JSON', function () {",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.match(/application\\/json/i);",
+							"  });",
+							"  const j = pm.response.json();",
+							"  pm.test('Has basic fields', function () {",
+							"    pm.expect(j).to.have.property('message');",
+							"    pm.expect(j).to.have.property('id').that.is.a('number');",
+							"    pm.expect(j).to.have.property('created_at');",
+							"  });",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/xml"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Hello\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC31 - Tab/CR characters in message (\\t/\\r)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+							"const json = pm.response.json();",
+							"pm.expect(json).to.have.property('message');",
+							"pm.expect(json).to.have.property('id').that.is.a('number');",
+							"pm.expect(json).to.have.property('created_at');"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\":\"Hello\\tWorld\\rTest\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/messages/{{messageId_valid}}/reply",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"messages",
+						"{{messageId_valid}}",
+						"reply"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{adminToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8091"
+		},
+		{
+			"key": "adminToken",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTEvdXNlcnMvbG9naW4iLCJpYXQiOjE3NTYwMTEwNjksImV4cCI6MTc3MTYxMTA2OSwibmJmIjoxNzU2MDExMDY5LCJqdGkiOiJJRzY5bkhwNUl0OWJHVUZaIiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJyb2xlIjoiYWRtaW4ifQ.XHMrYL58F0_z1sXct4nr9FRK8gQUNIfSDpgxZlRMeaA"
+		},
+		{
+			"key": "customerToken",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTEvdXNlcnMvbG9naW4iLCJpYXQiOjE3NTU5OTIxNTYsImV4cCI6MTc3MTU5MjE1NiwibmJmIjoxNzU1OTkyMTU2LCJqdGkiOiIxZmhqVVhWY1RrMzYxSHpaIiwic3ViIjoiMiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJyb2xlIjoidXNlciJ9.ulaHab_6DEfeQW7X5zgZYSXYOvY_M7-yYuQgMMFTqBQ"
+		},
+		{
+			"key": "invalidToken",
+			"value": "abcdefXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTEvdXNlcnMvbG9naW4iLCJpYXQiOjE3NTU5OTIxNTYsImV4cCI6MTc3MTU5MjE1NiwibmJmIjoxNzU1OTkyMTU2LCJqdGkiOiIxZmhqVVhWY1RrMzYxSHpaIiwic3ViIjoiMiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJyb2xlIjoidXNlciJ9.ulaHab_6DEfeQW7X5zZYSXYOvY_M7-yYuQgMMFTqBQ"
+		},
+		{
+			"key": "messageId_valid",
+			"value": "1"
+		},
+		{
+			"key": "messageId_notFound",
+			"value": "999999"
+		}
+	]
+}
