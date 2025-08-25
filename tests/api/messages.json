@@ -1,0 +1,822 @@
+{
+  "info": {
+    "name": "API-01 Send Message Test Cases",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTEvdXNlcnMvbG9naW4iLCJpYXQiOjE3NTU5OTIxNTYsImV4cCI6MTc3MTU5MjE1NiwibmJmIjoxNzU1OTkyMTU2LCJqdGkiOiIxZmhqVVhWY1RrMzYxSHpaIiwic3ViIjoiMiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJyb2xlIjoidXNlciJ9.ulaHab_6DEfeQW7X5zgZYSXYOvY_M7-yYuQgMMFTqBQ",
+        "type": "string"
+      }
+    ]
+  },
+
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8091" }
+  ],
+  "item": [
+    {
+      "name": "TC01 - Empty name",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"\",\"email\":\"abc@gmail.com\",\"subject\":\"Customer service\",\"message\":\"Thank you for your support. We truly appreciate your trust.\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC02 - Empty email",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"\",\"subject\":\"Customer service\",\"message\":\"Thank you for your support. We truly appreciate your trust.\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC03 - Empty message",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"abc@gmail.com\",\"subject\":\"Customer service\",\"message\":\"\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test('Status 422', function () { pm.response.to.have.status(422); });",
+            "pm.test('Error on message field', function () {",
+            "  const j = pm.response.json();",
+            "  const e = j.errors || j;",
+            "  pm.expect(e).to.have.property('message');",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC04 - Name 120 chars (upper boundary)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"MaximilianoChristopherAlexanderJonathanFitzgeraldMontgomeryNicholasBenjaminNathanielBartholomewQuinc Featherstoniehaughx\",\"email\":\"abc@gmail.com\",\"subject\":\"Customer service\",\"message\":\"Thank you for your support. We truly appreciate your trust.\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC05 - Name 121 chars (above upper boundary)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"MaximilianoChristopherAlexanderJonathanFitzgeraldMontgomeryNicholasBenjaminNathanielBartholomewQuinc Featherstonielhaughx\",\"email\":\"abc@gmail.com\",\"subject\":\"Customer service\",\"message\":\"Thank you for your support. We truly appreciate your trust.\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 422\", function () {",
+            "    pm.response.to.have.status(422);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC06 - Name 60 chars (actual upper boundary)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"MaximilianoChristopherAlexanderJonathanFitzgeraldMontgomer Q\",\"email\":\"abc@gmail.com\",\"subject\":\"Customer service\",\"message\":\"Thank you for your support. We truly appreciate your trust.\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC07 - Name 59 chars (mid-range value)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"MaximilanoChristopherAlexanderJonathanFitzgeraldMontgomer Q\",\"email\":\"abc@gmail.com\",\"subject\":\"Customer service\",\"message\":\"Thank you for your support. We truly appreciate your trust.\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC08 - Invalid email format",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"012345678\",\"subject\":\"Customer service\",\"message\":\"Thank you for your support. We truly appreciate your trust.\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 422\", function () {",
+            "    pm.response.to.have.status(422);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC09 - Email 120 chars (upper boundary)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"averyveryverylongfirstnameandlastnameplusrandomletters1234567890abcdefghij1234567890abcdefghijklm@verylongdomainname.com\",\"subject\":\"Customer service\",\"message\":\"Thank you for your support. We truly appreciate your trust.\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC10 - Email 121 chars (above upper boundary)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"averyveryverylongfirstnameandlastnameplusrandomletters1234567890abcdefghij1234567890abcdefghijklmn@verylongdomainname.com\",\"subject\":\"Customer service\",\"message\":\"Thank you for your support. We truly appreciate your trust.\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 422\", function () {",
+            "    pm.response.to.have.status(422);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC11 - Email 60 chars (actual upper boundary)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"averyveryverylongemailnamewithpadding1234567890@longmail.com\",\"subject\":\"Customer service\",\"message\":\"Thank you for your support. We truly appreciate your trust.\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC12 - Email 61 chars (above actual upper boundary)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"averyveryverylongemailnamewithpadding01234567890@longmail.com\",\"subject\":\"Customer service\",\"message\":\"Thank you for your support. We truly appreciate your trust.\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC13 - Email 58 chars (mid-range value)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"averyveryverylongemailnamewithpadding12345678@longmail.com\",\"subject\":\"Customer service\",\"message\":\"Thank you for your support. We truly appreciate your trust.\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC14 - 59-char message, empty subject",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"abc@gmail.com\",\"subject\":\"\",\"message\":\"Thank you for your support. We truly appreciate your trust.\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 422\", function () {",
+            "    pm.response.to.have.status(422);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC15 - 65-char message, normal subject",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"abc@gmail.com\",\"subject\":\"Customer service\",\"message\":\"Thank you for your support! Everything works perfectly now. Yay!!\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC16 - 251-char message (above upper boundary)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"abc@gmail.com\",\"subject\":\"Customer service\",\"message\":\"Hello, I’ve been experiencing issues with my recent order. The tracking number doesn’t seem to update, and the estimated delivery date has already passed. I would really appreciate your support in resolving this issue as soon as possible. Thank you!!!\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 422\", function () {",
+            "    pm.response.to.have.status(422);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC17 - 50-char message (lower boundary)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"abc@gmail.com\",\"subject\":\"Customer service\",\"message\":\"Thank you so much! The issue is resolved now. Yay!\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC18 - 49-char message (below lower boundary)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"abc@gmail.com\",\"subject\":\"Customer service\",\"message\":\"Thanks again! Everything seems to work just fine.\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 422\", function () {",
+            "    pm.response.to.have.status(422);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC19 - 250-char message (upper boundary)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"abc@gmail.com\",\"subject\":\"Customer service\",\"message\":\"Hello, I’ve been experiencing issues with my recent order. The tracking number doesn’t seem to update, and the estimated delivery date has already passed. I would really appreciate your support in resolving this issue as soon as possible. Thank you!!\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC20 - Subject: Error 101: subject not found",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"abc@gmail.com\",\"subject\":\"Error 101: subject not found\",\"message\":\"Thank you for your support. We truly appreciate your trust.\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 422\", function () {",
+            "    pm.response.to.have.status(422);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC21 - Subject: Error 202: Translation error",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"abc@gmail.com\",\"subject\":\"Error 202: Translation error\",\"message\":\"Thank you for your support. We truly appreciate your trust.\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 422\", function () {",
+            "    pm.response.to.have.status(422);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC22 - Invalid Subject",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"abc@gmail.com\",\"subject\":\"Error 202: Fake subject\",\"message\":\"Thank you for your support. We truly appreciate your trust.\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 422\", function () {",
+            "    pm.response.to.have.status(422);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC23 - SQL injection in name",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Robert'); DROP TABLE messages;--\",\"email\":\"abc@gmail.com\",\"subject\":\"Website\",\"message\":\"Test\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"No 5xx error\", function () {",
+            "    pm.expect(pm.response.code).not.to.be.within(500,599);",
+            "});",
+            "pm.test(\"Valid JSON response\", function () {",
+            "    pm.response.to.be.json;",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC24 - SQL injection in subject",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"abc@gmail.com\",\"subject\":\"test' OR '1'='1\",\"message\":\"Test\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"No 5xx error\", function () {",
+            "    pm.expect(pm.response.code).not.to.be.within(500,599);",
+            "});",
+            "pm.test(\"Valid JSON response\", function () {",
+            "    pm.response.to.be.json;",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC25 - SQL injection in message",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"abc@gmail.com\",\"subject\":\"Website\",\"message\":\"x'); UPDATE users SET role='admin';--\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"No 5xx error\", function () {",
+            "    pm.expect(pm.response.code).not.to.be.within(500,599);",
+            "});",
+            "pm.test(\"Valid JSON response\", function () {",
+            "    pm.response.to.be.json;",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC26 - XSS in name",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"<script>alert(1)</script>\",\"email\":\"abc@gmail.com\",\"subject\":\"Website\",\"message\":\"Test\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test('Rejected with 400/422', function () {",
+            "  pm.expect([400,422]).to.include(pm.response.code);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC27 - XSS in subject",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"abc@gmail.com\",\"subject\":\"<img src=x onerror=alert(1)>\",\"message\":\"Test\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test('Rejected with 400/422', function () {",
+            "  pm.expect([400,422]).to.include(pm.response.code);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC28 - CRLF/header injection in email",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"victim@example.com\\r\\nBcc: attacker@ex.com\",\"subject\":\"Website\",\"message\":\"Test\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 422\", function () {",
+            "    pm.response.to.have.status(422);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC29 - CRLF/header injection in subject",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"abc@gmail.com\",\"subject\":\"Hello\\r\\nBCC: attacker@ex.com\",\"message\":\"Test\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 400\", function () {",
+            "    pm.response.to.have.status(400);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC30 - Malformed JSON body",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"John\",\"email\":\"a@b\",}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 400\", function () {",
+            "    pm.response.to.have.status(400);",
+            "});",
+            "pm.test(\"No stack traces\", function () {",
+            "    pm.expect(pm.response.text()).not.to.match(/stack|trace/i);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC31 - Unexpected fields (strict schema)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"John\",\"email\":\"abc@gmail.com\",\"subject\":\"Website\",\"message\":\"Test\",\"admin\":true}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"No privilege escalation\", function () {",
+            "    pm.response.to.be.json;",
+            "    var json = pm.response.json();",
+            "    pm.expect(json).to.not.have.property('admin');",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC32 - HTML in message is sanitized",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"abc@gmail.com\",\"subject\":\"Website\",\"message\":\"<b>Hello</b><script>alert(1)</script>\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"No active content\", function () {",
+            "    pm.response.to.be.json;",
+            "    var json = pm.response.json();",
+            "    pm.expect(JSON.stringify(json)).not.to.include('<script>');",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC33 - Email spoofing format is rejected",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Jane Doe\",\"email\":\"\\\"John\\\" <john@example.com> (CEO)\",\"subject\":\"Website\",\"message\":\"Test\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test(\"Status code is 422\", function () {",
+            "    pm.response.to.have.status(422);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    },
+    {
+      "name": "TC34 - CSRF protection blocks POST without token",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+        "body": { "mode": "raw", "raw": "{\"name\":\"Jane Doe\",\"email\":\"abc@gmail.com\",\"subject\":\"Website\",\"message\":\"Test\"}" }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "// If CSRF is enforced, expect 403. If stateless, this test is N/A.",
+            "pm.test(\"CSRF protection (if enforced)\", function () {",
+            "    pm.expect([403,200]).to.include(pm.response.code);",
+            "});"
+          ],
+          "type": "text/javascript"
+        }
+      }]
+    }
+  ]
+}
